@@ -47,6 +47,12 @@ const VideoExerciseCard: React.FC = () => {
 
       {/* Show feedback only after selection */}
       {selected !== null && <Feedback isCorrect={isCorrect!} />}
+        {/* Explanation shown only if answer is correct */}
+      {isCorrect && (
+        <p className="mt-2 text-sm text-gray-700">
+          The <code>useState</code> hook returns an array with the current state value and a setter function, which we extract using array destructuring.
+        </p>
+      )}
     </div>
   );
 };
