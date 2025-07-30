@@ -3,17 +3,17 @@ import VideoEmbed from './VideoEmbed';
 import Question from './Question';
 import AnswerOptions from './AnswerOptions';
 import Feedback from './Feedback';
+import { questions } from '../data/questions';
+
+const q = questions[0];
 
 const VideoExerciseCard: React.FC = () => {
   const [selected, setSelected] = useState<number | null>(null);
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
 
-  // Correct answer: index 2 ('const [count, setCount] = useState(0);')
-  const correctIndex = 2;
-
   const handleSelect = (index: number) => {
     setSelected(index);
-    setIsCorrect(index === correctIndex);
+    setIsCorrect(index === q.correctIndex);
   };
 
   return (
@@ -27,30 +27,26 @@ const VideoExerciseCard: React.FC = () => {
         backgroundColor: '#fafafa',
       }}
     >
-      {/* Updated video and timestamp */}
-      <VideoEmbed videoId="O6P86uwfdR0" timestamp="3:00" />
+      {/* Embed video at timestamp */}
+      <VideoEmbed videoId={q.videoId} timestamp={q.timestamp} />
 
-      {/* Updated question */}
-      <Question text="What is the correct way to initialize a state variable in React using useState?" />
+      {/* Render question text */}
+      <Question text={q.question} />
 
-      {/* Updated answer options */}
+      {/* Render answer options */}
       <AnswerOptions
-        options={[
-          'const count = useState(0);',
-          'let [count] = useState(0);',
-          'const [count, setCount] = useState(0);',
-          'useState(count, setCount, 0);',
-        ]}
+        options={q.options}
         selected={selected}
         onSelect={handleSelect}
       />
 
-      {/* Show feedback only after selection */}
+      {/* Show feedback if an answer is selected */}
       {selected !== null && <Feedback isCorrect={isCorrect!} />}
-        {/* Explanation shown only if answer is correct */}
+
+      {/* Show explanation if answer is correct */}
       {isCorrect && (
-        <p className="mt-2 text-sm text-gray-700">
-          The <code>useState</code> hook returns an array with the current state value and a setter function, which we extract using array destructuring.
+        <p style={{ marginTop: '0.75rem', fontSize: '0.9rem', color: '#333' }}>
+          {q.explanation}
         </p>
       )}
     </div>
