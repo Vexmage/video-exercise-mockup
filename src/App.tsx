@@ -1,4 +1,4 @@
-import React from 'react';
+
 import VideoExerciseCard from './components/VideoExerciseCard';
 
 function App() {
