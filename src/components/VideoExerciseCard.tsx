@@ -5,15 +5,23 @@ import AnswerOptions from './AnswerOptions';
 import Feedback from './Feedback';
 import { questions } from '../data/questions';
 
-const q = questions[0];
-
 const VideoExerciseCard: React.FC = () => {
+  const [currentIndex, setCurrentIndex] = useState(0);
   const [selected, setSelected] = useState<number | null>(null);
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
+
+  const q = questions[currentIndex];
 
   const handleSelect = (index: number) => {
     setSelected(index);
     setIsCorrect(index === q.correctIndex);
+  };
+
+  const handleNext = () => {
+    const nextIndex = (currentIndex + 1) % questions.length;
+    setCurrentIndex(nextIndex);
+    setSelected(null);
+    setIsCorrect(null);
   };
 
   return (
@@ -27,27 +35,37 @@ const VideoExerciseCard: React.FC = () => {
         backgroundColor: '#fafafa',
       }}
     >
-      {/* Embed video at timestamp */}
       <VideoEmbed videoId={q.videoId} timestamp={q.timestamp} />
-
-      {/* Render question text */}
       <Question text={q.question} />
-
-      {/* Render answer options */}
       <AnswerOptions
         options={q.options}
         selected={selected}
         onSelect={handleSelect}
       />
-
-      {/* Show feedback if an answer is selected */}
       {selected !== null && <Feedback isCorrect={isCorrect!} />}
-
-      {/* Show explanation if answer is correct */}
       {isCorrect && (
         <p style={{ marginTop: '0.75rem', fontSize: '0.9rem', color: '#333' }}>
           {q.explanation}
         </p>
+      )}
+
+      {/* Show next button after answering */}
+      {selected !== null && (
+        <button
+          onClick={handleNext}
+          style={{
+            marginTop: '1rem',
+            padding: '0.5rem 1rem',
+            fontSize: '1rem',
+            backgroundColor: '#4f46e5',
+            color: 'white',
+            border: 'none',
+            borderRadius: '4px',
+            cursor: 'pointer',
+          }}
+        >
+          Next Question
+        </button>
       )}
     </div>
   );
